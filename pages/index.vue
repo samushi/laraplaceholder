@@ -1,5 +1,12 @@
 <template>
-  <div class="uploadform">
+  <div 
+    class="uploadform" 
+    :class="highlighted ? 'highlighted' : ''"
+
+    @drop="onDropped"
+    @dragover="onDragOver" 
+    @dragleave="onDragLeave"
+  >
         <h2>Drag & Drop files here</h2>
         <p>(only .JPEG, .JPG, .PNG & .GIF accepted)</p>
         <p>OR</p>
@@ -14,12 +21,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from '@vue/composition-api'
+import { defineComponent, ref, Ref, onMounted } from '@vue/composition-api'
 
 export default defineComponent({
-
     setup () {
         const uploading = ref<HTMLElement | null>(null)
+        const highlighted = ref<boolean>(false);
+
+        // Drag Files
+        const onDropped = (e: DragEvent) => {
+            e.preventDefault();
+            highlighted.value = false;
+
+            let dt = <DataTransfer>e.dataTransfer,
+                files = <FileList>dt?.files,
+                items = <DataTransferItemList>dt.items,
+                entry = items[0].webkitGetAsEntry();
+
+            console.log(files, entry);
+
+            if(entry.isDirectory){
+                console.log("Is dir");
+            }else if(entry.isFile){
+                console.log("is file");
+            }
+
+        }
+
+        const onDragOver = (e: DragEvent) => {
+            e.preventDefault();
+            highlighted.value = true;
+            console.log("On Drag over")
+        }
+
+        const onDragLeave = (e: DragEvent) => {
+            highlighted.value = false;
+            console.log("On Drag Leave");
+        }
 
         const onClickFileUplopad = () => {
             uploading.value?.click()
@@ -41,10 +79,17 @@ export default defineComponent({
             });
 
             console.log(fileBag);
-        
         }
 
-        return {onClickFileUplopad, onFileSelected, uploading}
+        return {
+            onClickFileUplopad, 
+            onFileSelected, 
+            uploading, 
+            highlighted,
+            onDropped,
+            onDragOver,
+            onDragLeave
+        }
     }
 })
 </script>
@@ -55,6 +100,10 @@ export default defineComponent({
     }
     .uploadform{
         @apply p-16 border-form-color border-dashed border-4 rounded-2xl text-center text-white;
+
+        &.highlighted{
+            @apply border-yellow-500;
+        }
 
         > h2{
             @apply font-lato text-7xl italic font-bold;
