@@ -28,7 +28,7 @@ export default defineComponent({
         const uploading = ref<HTMLElement | null>(null)
         const highlighted = ref<boolean>(false);
 
-        // Drag Files
+        // Drag Files or Folder
         const onDropped = (e: DragEvent) => {
             e.preventDefault();
             highlighted.value = false;
@@ -38,12 +38,10 @@ export default defineComponent({
                 items = <DataTransferItemList>dt.items,
                 entry = items[0].webkitGetAsEntry();
 
-            console.log(files, entry);
-
             if(entry.isDirectory){
-                console.log("Is dir");
+                console.log("Is dir", files);
             }else if(entry.isFile){
-                console.log("is file");
+                console.log("is file", files);
             }
 
         }
