@@ -45,6 +45,10 @@ body{
 	.content{
 		@apply bg-content-pattern p-14;
 
+		> div{
+			@apply max-w-5xl mx-auto;
+		}
+
 		&.error-page{
 			@apply flex justify-center content-center flex-wrap;
 

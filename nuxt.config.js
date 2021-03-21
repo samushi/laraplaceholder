@@ -12,7 +12,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap'},
+      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito:400,700|Lato:400,700,700italic&display=swap'},
       {rel: 'stylesheet', href: '/fonts/cobin-web/stylesheet.css'}
     ]
   },

@@ -16,6 +16,8 @@
         </nav>
     </header>
 
-    <Nuxt class="content" />
+    <section class="content">
+      <Nuxt />
+    </section>
   </div>
 </template>

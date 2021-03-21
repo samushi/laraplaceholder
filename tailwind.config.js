@@ -42,6 +42,7 @@ module.exports = {
         },
         fontFamily: {
           'nunito': ['nunito', 'sans-serif'],
+          'lato': ['lato', 'sans-serif'],
           'cabinbold': ['cabinbold', 'sans-serif'],
         },
         colors: {
