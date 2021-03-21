@@ -40,7 +40,7 @@ module.exports = {
         },
         fontFamily: {
           'nunito': ['nunito', 'sans-serif'],
-          'cabinbold': ['cabinbold', ...defaultTheme.fontFamily.sans],
+          'cabinbold': ['cabinbold', 'sans-serif'],
         },
         colors: {
           placeholder: {
