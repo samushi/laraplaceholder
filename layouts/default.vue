@@ -1,21 +1,21 @@
 <template>
-  <div class="app-container max-w-screen-lg	mx-auto my-20">
-    <header class="flex overflow-hidden h-header">
+  <div class="app-container">
+    <header>
           <nav class="navbar">
-            <a class="navbar-logo" href="/">
+            <NuxtLink to="/" class="navbar-logo">
                 <img class="fill-current mr-3" src="@/assets/images/logo.png">
                 Laraholder
-            </a>
+            </NuxtLink>
  
             <div class="nav">
-                <a href="#" class="item-link active">Home</a>
-                <a href="#" class="item-link">How to use</a>
-                <a href="#" class="item-link">Contact us</a>
+                <NuxtLink to="/" class="item-link">Home</NuxtLink>
+                <NuxtLink to="/how-to-use" class="item-link">How to use</NuxtLink>
+                <NuxtLink to="/contact-us" class="item-link">Contact us</NuxtLink>
             </div>
 
         </nav>
     </header>
 
-    <Nuxt />
+    <Nuxt class="content" />
   </div>
 </template>

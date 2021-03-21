@@ -28,7 +28,7 @@ module.exports = {
     theme: {
       screens: {
         md: '768px',
-        lg: '1200px',
+        lg: '1400px',
         xl: '1920px',
       },
       extend: {
@@ -49,7 +49,8 @@ module.exports = {
           }
         },
         backgroundImage: theme => ({
-          "body-pattern": "url('/assets/images/bg.jpg')",
+          "body-pattern": "url('~/assets/images/bg.jpg')",
+          "content-pattern": "url('~/assets/images/content-bg.png')"
         })
       }
     },
