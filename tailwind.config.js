@@ -21,7 +21,9 @@ module.exports = {
         'plugins/**/*.js',
         'nuxt.config.js',
         './pages/**/*.{js,ts,jsx,tsx}',
-        './components/**/*.{js,ts,jsx,tsx}'
+        './components/**/*.{js,ts,jsx,tsx}',
+        'assets/css/*.css',
+        'static/fonts/**/*.css'
       ]
     },
     dark: 'class',
