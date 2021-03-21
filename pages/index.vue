@@ -1,5 +1,5 @@
 <template>
-  <h2 class="text-2xl text-white text-center">{{message}}</h2>
+  <h2 class="test-header">{{message}}</h2>
 </template>
 
 <script lang="ts">
@@ -16,6 +16,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
-
+<style lang="postcss">
+    .test-header{
+        @apply text-2xl text-placeholder-light text-center;
+    }
 </style>

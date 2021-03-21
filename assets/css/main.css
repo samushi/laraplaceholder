@@ -49,7 +49,7 @@ body{
 			@apply flex justify-center content-center flex-wrap;
 
 			.heading{
-				@apply block w-full text-center text-white error-text;
+				@apply block w-full text-center text-placeholder-light error-text;
 			}
 		
 			.back-to-home{
