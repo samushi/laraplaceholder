@@ -3,6 +3,17 @@ body{
 	@apply bg-body-pattern bg-placeholder bg-no-repeat bg-center bg-fixed bg-cover w-full h-full m-0;
 }
 
+/**
+* Global
+*/
+
+.error-text{
+	font-size: 80px;
+}
+
+/**
+* App
+*/
 .app-container{
 	@apply max-w-screen-lg mx-auto my-24;
 
@@ -33,5 +44,17 @@ body{
 
 	.content{
 		@apply bg-content-pattern p-14;
+
+		&.error-page{
+			@apply flex justify-center content-center flex-wrap;
+
+			.heading{
+				@apply block w-full text-center text-white error-text;
+			}
+		
+			.back-to-home{
+				@apply text-white font-cabinbold font-bold text-lg;
+			}
+		}
 	}
 }
