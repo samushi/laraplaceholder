@@ -11,7 +11,7 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/assets/images/favicon/favicon.ico' },
       {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito:400,700|Lato:400,700,700italic&display=swap'},
       {rel: 'stylesheet', href: '/fonts/cobin-web/stylesheet.css'}
     ]
@@ -32,6 +32,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    // 'nuxt-vite',
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
