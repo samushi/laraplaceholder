@@ -2,17 +2,18 @@ import { inject } from "@vue/composition-api";
 import { Plugin } from '@nuxt/types'
 import { render } from "sass";
 
-interface Placeholder {
+export interface PlaceholderInterface {
     ping() : string,
-    traverseDirectory(entry: any) : Promise<any>
+    traverseDirectory<T = any>(entry: any) : Promise<T>
 }
 
-const $placeholder : Placeholder = {
-    ping:  () : string => {
-        return "This is ping";
-    },
-
-    traverseDirectory(this: Placeholder, entry: any) : Promise<any> {
+class PlaceholderInstance implements PlaceholderInterface{
+    ping():string{
+      return "This is ping";
+    }
+    
+    traverseDirectory(this: PlaceholderInterface, entry: any) : Promise<any>
+    {
       const reader: any = entry.createReader();
 
       return new Promise((resolve, reject) => {
@@ -39,11 +40,11 @@ const $placeholder : Placeholder = {
           readEntries();
       });
     }
+
 }
 
-
 const Placeholder: Plugin = (context : any, inject : any) => {
-  inject('placeholder', $placeholder)
+  inject('placeholder', new PlaceholderInstance())
 }
 
 export default Placeholder

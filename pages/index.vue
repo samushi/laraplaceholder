@@ -55,7 +55,7 @@ export default defineComponent({
                 const item = entries[i];
                 const entry = item.webkitGetAsEntry();
 
-                AppContext.$placeholder.traverseDirectory(entry).then((results: any) => {
+                AppContext.$placeholder.traverseDirectory(entry).then((results: any[]) => {
                     getEntry(results[0]);
 
                     Promise.all(fileListDirectory).then((fl: any) => {
@@ -126,9 +126,7 @@ export default defineComponent({
                         // Show last page
                         // Reset Progress
                         progress.value = 0;
-
                         downloadUrl.value = res.data.download;
-
                     }
                 }).catch((e: any) => {
                     console.log(e);
@@ -142,7 +140,7 @@ export default defineComponent({
             appendImages(files);
             generateImages();
 
-            console.log("Yes this very good");
+            console.log("Yes this very good", fileBag);
         }
 
         const onFileSelected = (e: Event) => {
