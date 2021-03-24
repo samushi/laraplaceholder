@@ -21,12 +21,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, onMounted } from '@vue/composition-api'
+import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
     setup () {
         const uploading = ref<HTMLElement | null>(null)
+        const progress = ref<number>(0)
         const highlighted = ref<boolean>(false);
+        const fileListDirectory: any[] = [];
+        const fileBag: File[] = [];
+        const AppContext = useContext();
+        const downloadUrl = ref<string>("#");
 
         // Drag Files or Folder
         const onDropped = (e: DragEvent) => {
@@ -39,32 +44,56 @@ export default defineComponent({
                 entry = items[0].webkitGetAsEntry();
 
             if(entry.isDirectory){
-                console.log("Is dir", files);
+                readDropped(items);
             }else if(entry.isFile){
-                console.log("is file", files);
+                uploadFiles(files);
             }
+        }
 
+        const readDropped = (entries: any) => {
+            for (let i = 0; i < entries.length; i += 1) {
+                const item = entries[i];
+                const entry = item.webkitGetAsEntry();
+
+                AppContext.$placeholder.traverseDirectory(entry).then((results: any) => {
+                    getEntry(results[0]);
+
+                    Promise.all(fileListDirectory).then((fl: any) => {
+						uploadFiles(fl);
+                    });
+
+                });
+            }
+        }
+
+        const getEntry = (results: any[]) => {
+            results.map((r)=> {
+                if(Array.isArray(r)){
+                    getEntry(r);
+                }else{
+                    fileListDirectory.push(getFile(r));
+                }
+            })
+        }
+
+        const getFile = async (fileEntry: any) : Promise<any> => {
+            return await new Promise((resolve, reject) => fileEntry.file(resolve, reject));
         }
 
         const onDragOver = (e: DragEvent) => {
             e.preventDefault();
             highlighted.value = true;
-            console.log("On Drag over")
         }
 
         const onDragLeave = (e: DragEvent) => {
             highlighted.value = false;
-            console.log("On Drag Leave");
         }
 
         const onClickFileUplopad = () => {
             uploading.value?.click()
         }
 
-        const onFileSelected = (e: Event) => {
-            const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
-            let fileBag: File[] = [];
-
+        const appendImages = (files: FileList) => {
             Array.from(files).forEach((file) => {
                 if(
                     file.type === "image/jpeg" ||
@@ -75,8 +104,50 @@ export default defineComponent({
                     fileBag.push(file);
                 }
             });
+        }
 
-            console.log(fileBag);
+        const generateImages = () : void => {
+
+            const fd:FormData = new FormData();
+
+            if(fileBag.length > 0){
+                fileBag.forEach((image) => {
+                    fd.append('files[]', image, image.name);
+                });
+
+                // Show Uploading page
+                AppContext.$axios.post('/', fd, {
+                    onUploadProgress: (uploadEvent: any) => {
+                        let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
+                        progress.value = percentage;
+                    }
+                }).then((res: any) => {
+                    if(res.status == 200){
+                        // Show last page
+                        // Reset Progress
+                        progress.value = 0;
+
+                        downloadUrl.value = res.data.download;
+
+                    }
+                }).catch((e: any) => {
+                    console.log(e);
+                });
+            }else{
+                alert("Please dont upload another type, just images you can upload");
+            }
+        }
+
+        const uploadFiles = (files: FileList)=> {
+            appendImages(files);
+            generateImages();
+
+            console.log("Yes this very good");
+        }
+
+        const onFileSelected = (e: Event) => {
+            const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
+            uploadFiles(files);
         }
 
         return {
@@ -86,7 +157,10 @@ export default defineComponent({
             highlighted,
             onDropped,
             onDragOver,
-            onDragLeave
+            onDragLeave,
+            fileBag,
+            downloadUrl,
+            progress
         }
     }
 })

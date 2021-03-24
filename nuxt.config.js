@@ -24,7 +24,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/composition-api'
+    '@/plugins/composition-api',
+    '@/plugins/placeholder-api.ts'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -35,16 +36,33 @@ export default {
     // 'nuxt-vite',
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
+    '@nuxtjs/composition-api',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios'
   ],
+  axios: {
+    // proxy: true
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     publicPath: '/storage/'
+  },
+
+  compilerOptions: {
+    types: [
+      "@nuxt/types",
+      "@nuxtjs/axios"
+    ]
+  },
+  
+  generate: {
+    // choose to suit your project
+    interval: 2000,
   }
 }
