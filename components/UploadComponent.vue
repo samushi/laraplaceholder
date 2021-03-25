@@ -83,6 +83,7 @@ export default defineComponent({
         return {
             onClickFileUplopad, 
             onFileSelected, 
+            uploading, 
             highlighted,
             onDropped,
             onDragOver,
