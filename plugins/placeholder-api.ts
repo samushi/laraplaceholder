@@ -8,6 +8,9 @@ export interface PlaceholderInterface {
 }
 
 class PlaceholderInstance implements PlaceholderInterface{
+
+    fileListDirectory: any[] = [];
+
     ping():string{
       return "This is ping";
     }
@@ -39,6 +42,36 @@ class PlaceholderInstance implements PlaceholderInterface{
 
           readEntries();
       });
+    }
+
+    readDropped(this: PlaceholderInstance, entries: any): void{
+        for (let i = 0; i < entries.length; i += 1) {
+            const item = entries[i];
+            const entry = item.webkitGetAsEntry();
+
+            this.traverseDirectory(entry).then((results: any[]) => {
+                    this.getEntry(results[0]);
+
+                Promise.all(this.fileListDirectory).then((fl: any) => {
+                    this.uploadFiles(fl);
+                });
+
+            });
+        }
+    }
+
+    getEntry(this: PlaceholderInstance, results: any[]){
+        results.map((r)=> {
+            if(Array.isArray(r)){
+                this.getEntry(r);
+            }else{
+                this.fileListDirectory.push(this.getFile(r));
+            }
+        })
+    }
+
+    async getFile(this: PlaceholderInstance, fileEntry: any) : Promise<any>{
+        return await new Promise((resolve, reject) => fileEntry.file(resolve, reject));
     }
 
 }
