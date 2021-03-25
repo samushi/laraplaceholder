@@ -11,8 +11,8 @@
     export default defineComponent({
         setup(){
             const showComponent = ref<Object>({
-                upload: false,
-                processing: true,
+                upload: true,
+                processing: false,
                 downloading: false          
             })
 

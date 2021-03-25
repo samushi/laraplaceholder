@@ -67,6 +67,8 @@ export default defineComponent({
         const generateImages = () : void => {
             const fd:FormData = new FormData();
 
+            console.log(fileBag);
+
             if(fileBag.length > 0){
                 fileBag.forEach((image) => {
                     fd.append('files[]', image, image.name);
@@ -96,6 +98,7 @@ export default defineComponent({
         const onFileSelected = (e: Event) => {
             const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
             AppContext.$placeholder.uploadFiles(files);
+            generateImages();
         }
 
         return {
@@ -159,7 +162,6 @@ export default defineComponent({
             input{
                 &.input-files{
                     @apply hidden;
-                    /* @apply absolute left-0 top-0 opacity-0 w-full h-full z-auto cursor-pointer; */
                 }
             }
 
