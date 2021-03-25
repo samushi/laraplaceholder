@@ -3,18 +3,22 @@ import { Plugin } from '@nuxt/types'
 import { render } from "sass";
 
 export interface PlaceholderInterface {
-    ping() : string,
+    fileBag: File[];
     traverseDirectory<T = any>(entry: any) : Promise<T>
+    readDropped(entries: any) : void
+    uploadFiles(files: FileList) : void
 }
 
 class PlaceholderInstance implements PlaceholderInterface{
 
-    fileListDirectory: any[] = [];
-
-    ping():string{
-      return "This is ping";
-    }
+    private fileListDirectory: any[] = [];
+    public fileBag: File[] = [];
     
+    /**
+     * Traversy directory
+     * @param this 
+     * @param entry 
+     */
     traverseDirectory(this: PlaceholderInterface, entry: any) : Promise<any>
     {
       const reader: any = entry.createReader();
@@ -44,7 +48,12 @@ class PlaceholderInstance implements PlaceholderInterface{
       });
     }
 
-    readDropped(this: PlaceholderInstance, entries: any): void{
+    /**
+     * When dropped files read directory or file
+     * @param this 
+     * @param entries 
+     */
+    public readDropped(this: PlaceholderInstance, entries: any): void{
         for (let i = 0; i < entries.length; i += 1) {
             const item = entries[i];
             const entry = item.webkitGetAsEntry();
@@ -60,7 +69,39 @@ class PlaceholderInstance implements PlaceholderInterface{
         }
     }
 
-    getEntry(this: PlaceholderInstance, results: any[]){
+    /**
+     * Upload files
+     * @param this 
+     * @param files 
+     */
+    public uploadFiles(this: PlaceholderInstance, files: FileList) : void {
+        this.appendImages(files);
+    }
+
+    /**
+     * Append Images to the bag
+     * @param this 
+     * @param files 
+     */
+    private appendImages(this: PlaceholderInstance, files: FileList) : void {
+      Array.from(files).forEach((file) => {
+          if(
+              file.type === "image/jpeg" ||
+              file.type === "image/jpg" ||
+              file.type === "image/gif" ||
+              file.type === "image/png"
+          ){
+              this.fileBag.push(file);
+          }
+      });
+    }
+
+    /**
+     * Get files from directory
+     * @param this 
+     * @param results 
+     */
+    private getEntry(this: PlaceholderInstance, results: any[]){
         results.map((r)=> {
             if(Array.isArray(r)){
                 this.getEntry(r);
@@ -70,7 +111,12 @@ class PlaceholderInstance implements PlaceholderInterface{
         })
     }
 
-    async getFile(this: PlaceholderInstance, fileEntry: any) : Promise<any>{
+    /**
+     * Get File
+     * @param this 
+     * @param fileEntry 
+     */
+    private async getFile(this: PlaceholderInstance, fileEntry: any) : Promise<any>{
         return await new Promise((resolve, reject) => fileEntry.file(resolve, reject));
     }
 
