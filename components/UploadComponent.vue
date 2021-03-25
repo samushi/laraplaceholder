@@ -32,6 +32,12 @@ export default defineComponent({
         const fileBag: File[] = AppContext.$placeholder.fileBag;
         const downloadUrl = ref<string>("#");
 
+        // Upload Event
+        const uploadingFn = (uploadEvent: any) => {
+            let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
+                progress.value = percentage;
+        };
+
         // Drag Files or Folder
         const onDropped = (e: DragEvent) => {
             e.preventDefault();
@@ -49,10 +55,7 @@ export default defineComponent({
                 WhenUploaded.uploadFiles(files);
             }
             // Generate from backend
-            WhenUploaded.generate((uploadEvent: any) => {
-                let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
-                progress.value = percentage;
-            });
+            WhenUploaded.generate(uploadingFn);
         }
 
         const onDragOver = (e: DragEvent) => {
@@ -72,10 +75,7 @@ export default defineComponent({
             const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
             AppContext.$placeholder
             .uploadFiles(files)
-            .generate((uploadEvent: any) => {
-                let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
-                progress.value = percentage;
-            });
+            .generate(uploadingFn);
         }
 
         return {

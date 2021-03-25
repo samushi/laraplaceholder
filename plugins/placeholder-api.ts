@@ -70,7 +70,6 @@ class PlaceholderInstance implements PlaceholderInterface{
                 axios.post(this.baseUrl, fd, {
                     onUploadProgress: onUploadProgress
                 }).then((r: AxiosResponse) => {
-                    console.log("Yes its working Elhamdulilah", this.baseUrl);
                     resolve(r);
                 })
                 .catch((e: AxiosError) => rejecet(e));
