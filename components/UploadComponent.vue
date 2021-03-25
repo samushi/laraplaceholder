@@ -29,8 +29,6 @@ export default defineComponent({
         const uploading = ref<HTMLElement | null>(null)
         const progress = ref<number>(0)
         const highlighted = ref<boolean>(false);
-        const fileBag: File[] = AppContext.$placeholder.fileBag;
-        const downloadUrl = ref<string>("#");
 
         // Upload Event
         const uploadingFn = (uploadEvent: any) => {
@@ -58,19 +56,23 @@ export default defineComponent({
             WhenUploaded.generate(uploadingFn);
         }
 
+        // On drag over
         const onDragOver = (e: DragEvent) => {
             e.preventDefault();
             highlighted.value = true;
         }
 
+        // On drag leave
         const onDragLeave = (e: DragEvent) => {
             highlighted.value = false;
         }
 
+        // On click to upload
         const onClickFileUplopad = () => {
             uploading.value?.click()
         }
 
+        // On file is selected
         const onFileSelected = (e: Event) => {
             const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
             AppContext.$placeholder
@@ -81,13 +83,10 @@ export default defineComponent({
         return {
             onClickFileUplopad, 
             onFileSelected, 
-            uploading, 
             highlighted,
             onDropped,
             onDragOver,
             onDragLeave,
-            fileBag,
-            downloadUrl,
             progress
         }
     }
