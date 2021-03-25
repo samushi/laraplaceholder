@@ -1,16 +1,22 @@
 import { inject } from "@vue/composition-api";
 import { Plugin } from '@nuxt/types'
 import { render } from "sass";
+import axios, {AxiosResponse, AxiosError, AxiosPromise} from 'axios';
+import { AnyNode } from "postcss";
+
+interface onUploadProgressInterface {
+    (uploadEvent: any) : void
+}
 
 export interface PlaceholderInterface {
     fileBag: File[];
-    traverseDirectory<T = any>(entry: any) : Promise<T>
-    readDropped(entries: any) : void
-    uploadFiles(files: FileList) : void
+    readDropped(entries: any) : PlaceholderInstance
+    uploadFiles(files: FileList) : PlaceholderInstance
+    generate(onUploadProgress: onUploadProgressInterface): Promise<any>
 }
 
 class PlaceholderInstance implements PlaceholderInterface{
-
+    private baseUrl: string = ""
     private fileListDirectory: any[] = [];
     public fileBag: File[] = [];
     
@@ -19,7 +25,7 @@ class PlaceholderInstance implements PlaceholderInterface{
      * @param this 
      * @param entry 
      */
-    traverseDirectory(this: PlaceholderInterface, entry: any) : Promise<any>
+    traverseDirectory(this: PlaceholderInstance, entry: any) : Promise<any>
     {
       const reader: any = entry.createReader();
 
@@ -47,13 +53,39 @@ class PlaceholderInstance implements PlaceholderInterface{
           readEntries();
       });
     }
+    
+    /**
+     * Generate Images
+     * @param onUploadProgress 
+     */
+    public generate(onUploadProgress: onUploadProgressInterface) : any
+    {
+        if(this.fileBag.length > 0)
+        {
+            const fd:FormData = new FormData();
+            this.fileBag.forEach((image) => {
+                fd.append('files[]', image, image.name);
+            });
+            return new Promise<any>((resolve, rejecet) => {
+                axios.post(this.baseUrl, fd, {
+                    onUploadProgress: onUploadProgress
+                }).then((r: AxiosResponse) => {
+                    console.log("Yes its working Elhamdulilah", this.baseUrl);
+                    resolve(r);
+                })
+                .catch((e: AxiosError) => rejecet(e));
+            });
+        }else{
+            console.log("Please dont upload another type, just images you can upload");
+        }
+    }
 
     /**
      * When dropped files read directory or file
      * @param this 
      * @param entries 
      */
-    public readDropped(this: PlaceholderInstance, entries: any): void{
+    public readDropped(entries: any): PlaceholderInstance{
         for (let i = 0; i < entries.length; i += 1) {
             const item = entries[i];
             const entry = item.webkitGetAsEntry();
@@ -67,6 +99,8 @@ class PlaceholderInstance implements PlaceholderInterface{
 
             });
         }
+
+        return this;
     }
 
     /**
@@ -74,8 +108,9 @@ class PlaceholderInstance implements PlaceholderInterface{
      * @param this 
      * @param files 
      */
-    public uploadFiles(this: PlaceholderInstance, files: FileList) : void {
+    public uploadFiles(files: FileList) : PlaceholderInstance {
         this.appendImages(files);
+        return this;
     }
 
     /**
@@ -83,7 +118,7 @@ class PlaceholderInstance implements PlaceholderInterface{
      * @param this 
      * @param files 
      */
-    private appendImages(this: PlaceholderInstance, files: FileList) : void {
+    private appendImages(files: FileList) : void {
       Array.from(files).forEach((file) => {
           if(
               file.type === "image/jpeg" ||
@@ -101,7 +136,7 @@ class PlaceholderInstance implements PlaceholderInterface{
      * @param this 
      * @param results 
      */
-    private getEntry(this: PlaceholderInstance, results: any[]){
+    private getEntry(results: any[]){
         results.map((r)=> {
             if(Array.isArray(r)){
                 this.getEntry(r);
@@ -116,7 +151,7 @@ class PlaceholderInstance implements PlaceholderInterface{
      * @param this 
      * @param fileEntry 
      */
-    private async getFile(this: PlaceholderInstance, fileEntry: any) : Promise<any>{
+    private async getFile(fileEntry: any) : Promise<any>{
         return await new Promise((resolve, reject) => fileEntry.file(resolve, reject));
     }
 

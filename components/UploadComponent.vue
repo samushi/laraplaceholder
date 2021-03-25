@@ -40,15 +40,19 @@ export default defineComponent({
             let dt = <DataTransfer>e.dataTransfer,
                 files = <FileList>dt?.files,
                 items = <DataTransferItemList>dt.items,
-                entry = items[0].webkitGetAsEntry();
+                entry = items[0].webkitGetAsEntry(),
+                WhenUploaded = AppContext.$placeholder;
 
             if(entry.isDirectory){
-                AppContext.$placeholder.readDropped(items);
+                WhenUploaded.readDropped(items);
             }else if(entry.isFile){
-                AppContext.$placeholder.uploadFiles(files);
+                WhenUploaded.uploadFiles(files);
             }
             // Generate from backend
-            generateImages();
+            WhenUploaded.generate((uploadEvent: any) => {
+                let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
+                progress.value = percentage;
+            });
         }
 
         const onDragOver = (e: DragEvent) => {
@@ -64,41 +68,14 @@ export default defineComponent({
             uploading.value?.click()
         }
 
-        const generateImages = () : void => {
-            const fd:FormData = new FormData();
-
-            console.log(fileBag);
-
-            if(fileBag.length > 0){
-                fileBag.forEach((image) => {
-                    fd.append('files[]', image, image.name);
-                });
-
-                // Show Uploading page
-                AppContext.$axios.post('/', fd, {
-                    onUploadProgress: (uploadEvent: any) => {
-                        let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
-                        progress.value = percentage;
-                    }
-                }).then((res: any) => {
-                    if(res.status == 200){
-                        // Show last page
-                        // Reset Progress
-                        progress.value = 0;
-                        downloadUrl.value = res.data.download;
-                    }
-                }).catch((e: any) => {
-                    console.log(e);
-                });
-            }else{
-                alert("Please dont upload another type, just images you can upload");
-            }
-        }
-
         const onFileSelected = (e: Event) => {
             const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
-            AppContext.$placeholder.uploadFiles(files);
-            generateImages();
+            AppContext.$placeholder
+            .uploadFiles(files)
+            .generate((uploadEvent: any) => {
+                let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
+                progress.value = percentage;
+            });
         }
 
         return {
