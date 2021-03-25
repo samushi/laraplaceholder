@@ -1,5 +1,5 @@
 # LaraPlaceholder
-
+![GitHub Logo](/static/img/preview.jpg)
 ## Build Setup
 
 ```bash
