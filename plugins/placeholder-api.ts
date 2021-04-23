@@ -47,7 +47,7 @@ class PlaceholderInstance implements PlaceholderInterface{
 
                     readEntries();
                   }
-              }, (e: any) => {console.log(e)});
+              }, (e: any) => {console.log(e, "Cant read directory")});
           }
 
           readEntries();
@@ -72,7 +72,10 @@ class PlaceholderInstance implements PlaceholderInterface{
                 }).then((r: AxiosResponse) => {
                     resolve(r);
                 })
-                .catch((e: AxiosError) => rejecet(e));
+                .catch((e: AxiosError) => {
+                    console.warn("We cant upload, something is wrong or not configured well");
+                    rejecet(e)
+                });
             });
         }else{
             console.log("Please dont upload another type, just images you can upload");
