@@ -35,7 +35,7 @@ export default defineComponent({
             let dt = <DataTransfer>e.dataTransfer,
                 files = <FileList>dt?.files,
                 items = <DataTransferItemList>dt.items,
-                entry = items[0].webkitGetAsEntry(),
+                entry = items[0].webkitGetAsEntry();
 
             if(entry.isDirectory){
                 Placeholder.readDropped(items);
