@@ -4,7 +4,6 @@
 ## About
 This application is primarily designed to simplify the work of creating dummy images during projects.
 
-
 ## Build Setup
 
 ```bash
