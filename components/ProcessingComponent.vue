@@ -14,7 +14,7 @@ import {PlaceEvent} from '~/types/helpers';
 export default defineComponent({
     props: ['inPost'],
     setup(props, {emit}) {
-        const AppContext = useContext();
+        const Placeholder = useContext().$placeholder;
         const progress = ref<Number>(0);
         const inPost = ref<PlaceEvent|null>(props.inPost);
 
@@ -36,22 +36,20 @@ export default defineComponent({
                 files = <FileList>dt?.files,
                 items = <DataTransferItemList>dt.items,
                 entry = items[0].webkitGetAsEntry(),
-                WhenUploaded = AppContext.$placeholder;
 
             if(entry.isDirectory){
-                WhenUploaded.readDropped(items);
+                Placeholder.readDropped(items);
             }else if(entry.isFile){
-                WhenUploaded.uploadFiles(files);
+                Placeholder.uploadFiles(files);
             }
             // Generate from backend
-            WhenUploaded.generate(uploadingFn).then(done);
+            Placeholder.generate(uploadingFn).then(done);
         }
 
         // When select file
         const onPostFile = (e:Event) => {
             const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
-            AppContext.$placeholder
-            .uploadFiles(files)
+            Placeholder.uploadFiles(files)
             .generate(uploadingFn)
             .then(done);
         }
