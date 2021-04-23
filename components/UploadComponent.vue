@@ -53,7 +53,9 @@ export default defineComponent({
                 WhenUploaded.uploadFiles(files);
             }
             // Generate from backend
-            WhenUploaded.generate(uploadingFn);
+            WhenUploaded.generate(uploadingFn).then((r:any) => {
+                console.log("yes its working", r);
+            });
         }
 
         // On drag over

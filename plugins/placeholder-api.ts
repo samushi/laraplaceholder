@@ -16,7 +16,7 @@ export interface PlaceholderInterface {
 }
 
 class PlaceholderInstance implements PlaceholderInterface{
-    private baseUrl: string = ""
+    private baseUrl: string = "http://backend-placeholder.test/api/"
     private fileListDirectory: any[] = [];
     public fileBag: File[] = [];
     
@@ -67,7 +67,7 @@ class PlaceholderInstance implements PlaceholderInterface{
                 fd.append('files[]', image, image.name);
             });
             return new Promise<any>((resolve, rejecet) => {
-                axios.post(this.baseUrl, fd, {
+                axios.post(this.baseUrl + 'upload', fd, { 
                     onUploadProgress: onUploadProgress
                 }).then((r: AxiosResponse) => {
                     resolve(r);
