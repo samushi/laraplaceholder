@@ -25,9 +25,7 @@ import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
     setup (props, {emit}) {
-        const AppContext = useContext();
         const uploading = ref<HTMLElement | null>(null)
-        // const progress = ref<number>(0)
         const highlighted = ref<boolean>(false);
 
         
@@ -35,23 +33,6 @@ export default defineComponent({
         const onDropped = (e: DragEvent) => {
             highlighted.value = false;
             emit('onPost', e);
-
-
-            // let dt = <DataTransfer>e.dataTransfer,
-            //     files = <FileList>dt?.files,
-            //     items = <DataTransferItemList>dt.items,
-            //     entry = items[0].webkitGetAsEntry(),
-            //     WhenUploaded = AppContext.$placeholder;
-
-            // if(entry.isDirectory){
-            //     WhenUploaded.readDropped(items);
-            // }else if(entry.isFile){
-            //     WhenUploaded.uploadFiles(files);
-            // }
-            // // Generate from backend
-            // WhenUploaded.generate(uploadingFn).then((r:any) => {
-            //     console.log("yes its working", r);
-            // });
         }
 
         // On drag over
@@ -73,11 +54,6 @@ export default defineComponent({
         // On file is selected
         const onFileSelected = (e: Event) => {
             emit('onPost', e);
-
-            // const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
-            // AppContext.$placeholder
-            // .uploadFiles(files)
-            // .generate(uploadingFn);
         }
 
         return {
