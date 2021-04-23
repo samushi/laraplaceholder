@@ -16,7 +16,7 @@ export interface PlaceholderInterface {
 }
 
 class PlaceholderInstance implements PlaceholderInterface{
-    private baseUrl: string = "http://backend-placeholder.test/api/"
+    private baseUrl:string = (process.env.API_URL as string); //"http://backend-placeholder.test/api/"
     private fileListDirectory: any[] = [];
     public fileBag: File[] = [];
     
