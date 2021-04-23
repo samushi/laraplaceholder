@@ -3,7 +3,7 @@
     class="uploadform" 
     :class="highlighted ? 'highlighted' : ''"
 
-    @drop="onDropped"
+    @drop.prevent="onDropped"
     @dragover="onDragOver" 
     @dragleave="onDragLeave"
   >
@@ -24,38 +24,34 @@
 import { defineComponent, ref, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
-    setup () {
+    setup (props, {emit}) {
         const AppContext = useContext();
         const uploading = ref<HTMLElement | null>(null)
-        const progress = ref<number>(0)
+        // const progress = ref<number>(0)
         const highlighted = ref<boolean>(false);
 
-        // Upload Event
-        const uploadingFn = (uploadEvent: any) => {
-            let percentage: number = Math.round(uploadEvent.loaded / uploadEvent.total * 100);
-                progress.value = percentage;
-        };
-
+        
         // Drag Files or Folder
         const onDropped = (e: DragEvent) => {
-            e.preventDefault();
             highlighted.value = false;
+            emit('onPost', e);
 
-            let dt = <DataTransfer>e.dataTransfer,
-                files = <FileList>dt?.files,
-                items = <DataTransferItemList>dt.items,
-                entry = items[0].webkitGetAsEntry(),
-                WhenUploaded = AppContext.$placeholder;
 
-            if(entry.isDirectory){
-                WhenUploaded.readDropped(items);
-            }else if(entry.isFile){
-                WhenUploaded.uploadFiles(files);
-            }
-            // Generate from backend
-            WhenUploaded.generate(uploadingFn).then((r:any) => {
-                console.log("yes its working", r);
-            });
+            // let dt = <DataTransfer>e.dataTransfer,
+            //     files = <FileList>dt?.files,
+            //     items = <DataTransferItemList>dt.items,
+            //     entry = items[0].webkitGetAsEntry(),
+            //     WhenUploaded = AppContext.$placeholder;
+
+            // if(entry.isDirectory){
+            //     WhenUploaded.readDropped(items);
+            // }else if(entry.isFile){
+            //     WhenUploaded.uploadFiles(files);
+            // }
+            // // Generate from backend
+            // WhenUploaded.generate(uploadingFn).then((r:any) => {
+            //     console.log("yes its working", r);
+            // });
         }
 
         // On drag over
@@ -76,10 +72,12 @@ export default defineComponent({
 
         // On file is selected
         const onFileSelected = (e: Event) => {
-            const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
-            AppContext.$placeholder
-            .uploadFiles(files)
-            .generate(uploadingFn);
+            emit('onPost', e);
+
+            // const files:FileList = (<FileList>(<HTMLInputElement>e.target).files);
+            // AppContext.$placeholder
+            // .uploadFiles(files)
+            // .generate(uploadingFn);
         }
 
         return {
@@ -89,8 +87,7 @@ export default defineComponent({
             highlighted,
             onDropped,
             onDragOver,
-            onDragLeave,
-            progress
+            onDragLeave
         }
     }
 })

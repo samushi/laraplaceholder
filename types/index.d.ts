@@ -1,5 +1,5 @@
 import { NuxtAxiosInstance } from "@nuxtjs/axios";
-import {PlaceholderInterface} from "@/plugins/placeholder-api.ts";
+import {PlaceholderInterface} from "@/plugins/placeholder-api";
 
 declare module "@nuxt/types" {
   interface Context {
