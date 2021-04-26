@@ -2,6 +2,7 @@
   <div>
       <UploadComponent v-if="showComponent.upload" @onPost="progressing" />
       <ProcessingComponent :inPost="uploading" @done="hasBeenUploaded" v-else-if="showComponent.processing" />
+      <DownloadComponent :downloadUrl="downloadUrl" @newUpload="progressing" v-else-if="showComponent.downloading" />
   </div>
 </template>
 
@@ -13,6 +14,7 @@
         setup(){
 
             const uploading = ref<PlaceEvent|null>(null);
+            const downloadUrl = ref<string|null>(null);
 
             const showComponent = ref<ShowComponent>({
                 upload: true,
@@ -27,16 +29,18 @@
             };
 
             const hasBeenUploaded = (link:string) => {
-                showComponent.value.upload = true;
+                showComponent.value.upload = false;
                 showComponent.value.processing = false;
-                console.log(link);
+                showComponent.value.downloading = true;
+                downloadUrl.value = link;
             }
 
             return {
                 showComponent,
                 progressing,
                 uploading,
-                hasBeenUploaded
+                hasBeenUploaded,
+                downloadUrl
             }
         }
     });
