@@ -10,7 +10,6 @@
             <div class="nav">
                 <NuxtLink to="/" class="item-link">Home</NuxtLink>
                 <NuxtLink to="/how-to-use" class="item-link">How to use</NuxtLink>
-                <NuxtLink to="/contact-us" class="item-link">Contact us</NuxtLink>
             </div>
 
         </nav>
