@@ -5,7 +5,7 @@
 This application is primarily designed to simplify the work of creating dummy images during projects.
 
 ## Build with 
-This application has been builed with **NuxtJS (VueJS)**, **TailwindCSS** and **Typescript** :star_struck:
+This application has been builded with **NuxtJS (VueJS)**, **TailwindCSS** and **Typescript** :star_struck:
 
 ## Build Setup
 
