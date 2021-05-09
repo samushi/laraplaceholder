@@ -4,6 +4,9 @@
 ## About
 This application is primarily designed to simplify the work of creating dummy images during projects.
 
+## Build with 
+This application has been builed with NuxtJS (VueJS), TailwindCSS and Typescript
+
 ## Build Setup
 
 ```bash
